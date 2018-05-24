@@ -14,19 +14,25 @@ router.get("/register", function(req, res) {
 
 // handle sign up logic
 router.post("/register", function(req, res) {
-    var newUser = new User({ username: req.body.username });
-    User.register(newUser, req.body.password, function(err, newUsr) {
-        if (err) {
-            req.flash("error", err.message);
-            res.redirect("/register");
-        }
-        else {
-            passport.authenticate("local")(req, res, function() {
-                req.flash("success", "Welcome to YelpCamp, " + newUsr.username);
-                res.redirect("/campgrounds");
-            });
-        }
-    });
+    if (req.body.password !== req.body.passwordConf) {
+        req.flash("error", "Password and Password Confirmation don't match each other.");
+        res.redirect("/register");
+    }
+    else {
+        var newUser = new User({ username: req.body.username });
+        User.register(newUser, req.body.password, function(err, newUsr) {
+            if (err) {
+                req.flash("error", err.message);
+                res.redirect("/register");
+            }
+            else {
+                passport.authenticate("local")(req, res, function() {
+                    req.flash("success", "Welcome to YelpCamp, " + newUsr.username);
+                    res.redirect("/campgrounds");
+                });
+            }
+        });
+    }
 });
 
 // show login form
@@ -39,7 +45,7 @@ router.post("/login", passport.authenticate("local", {
     successRedirect: "/campgrounds",
     failureRedirect: "/login",
     failureFlash: true,
-    successFlash: "Welcome to YelpCamp!" 
+    successFlash: "Welcome to YelpCamp!"
 }), function(err, user) {
     if (err) {
         console.log(err);
