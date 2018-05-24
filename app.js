@@ -44,6 +44,7 @@ app.use(flash());
 // transfer the logged user to every individual route.
 app.use(function(req, res, next) {
     res.locals.currentUser = req.user;
+    //Flash out the success message or the error message
     res.locals.error = req.flash("error");
     res.locals.success = req.flash("success");
     next();
