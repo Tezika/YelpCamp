@@ -23,11 +23,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/public"));
 app.use(methodOverride("_method"));
 
-// SeedDB();
 
 // PASSPORT CONFIGURATION
 app.use(require("express-session")({
-    secret: "Once again Tezika win the cleverest pebple",
+    secret: "Once again, Tezika is the cleverest people",
     resave: false,
     saveUninitialized: false
 }));
